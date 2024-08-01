@@ -1,8 +1,11 @@
 // pages/index.js
 import Head from 'next/head';
+import { useState } from 'react';
 import Todo from '../components/Todo';
 
 export default function Home() {
+  const [showTodo, setShowTodo] = useState(false);
+
   return (
     <div>
       <Head>
@@ -11,7 +14,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Todo />
+        {showTodo ? (
+          <Todo />
+        ) : (
+          <div style={{ textAlign: 'center', marginTop: '50px' }}>
+            <h1>TODOアプリへようこそ</h1>
+            <button onClick={() => setShowTodo(true)}>開始</button>
+          </div>
+        )}
       </main>
     </div>
   );
