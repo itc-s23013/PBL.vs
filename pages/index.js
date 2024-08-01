@@ -1,39 +1,42 @@
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import Todo from '../components/Todo';
+import Gacha from '../components/Gacha';
 import styles from '../styles/Home.module.css';
+import Link from 'next/link';
 
 export default function Home() {
   const [showTodo, setShowTodo] = useState(false);
+  const [showGacha, setShowGacha] = useState(false);
 
+  // 状態を初期化する
   useEffect(() => {
-    const savedShowTodo = JSON.parse(localStorage.getItem('showTodo'));
-    if (savedShowTodo !== null) {
-      setShowTodo(savedShowTodo);
-    }
+    setShowTodo(false);
+    setShowGacha(false);
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem('showTodo', JSON.stringify(showTodo));
-  }, [showTodo]);
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>TODOアプリ</title>
-        <meta name="description" content="Next.jsで作成したTODOアプリ" />
+        <title>アプリ選択</title>
+        <meta name="description" content="アプリ選択画面" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
         {showTodo ? (
-          <div>
-            <Todo />
-            <button className={styles.button} onClick={() => setShowTodo(false)}>戻る</button>
-          </div>
+          <Todo />
+        ) : showGacha ? (
+          <Gacha />
         ) : (
           <div>
-            <h1 className={styles.header}>TODOアプリへようこそ</h1>
-            <button className={styles.button} onClick={() => setShowTodo(true)}>開始</button>
+            <h1 className={styles.header}>アプリ選択画面</h1>
+            <Link href="/todo">
+              <button>TODOアプリを開始</button>
+            </Link>
+            <br />
+            <Link href="/gacha">
+              <button>ガチャシミュレーターを開始</button>
+            </Link>
           </div>
         )}
       </main>
