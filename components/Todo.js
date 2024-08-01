@@ -31,7 +31,7 @@ const Todo = () => {
   };
 
   return (
-    <div>
+    <div style={{ textAlign: 'center', marginTop: '20px' }}>
       <h1>TODOリスト</h1>
       <input 
         type="text" 
@@ -40,7 +40,7 @@ const Todo = () => {
         placeholder="新しいTODOを入力"
       />
       <button onClick={addTodo}>追加</button>
-      <ul>
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
         {todos.map((todo, index) => (
           <li key={index}>
             {todo} 
