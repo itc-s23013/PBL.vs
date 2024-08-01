@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
 import Todo from '../components/Todo';
+import styles from '../styles/Home.module.css';
 
 export default function Home() {
   const [showTodo, setShowTodo] = useState(false);
 
-  // ローカルストレージからshowTodoの状態を読み込む
   useEffect(() => {
     const savedShowTodo = JSON.parse(localStorage.getItem('showTodo'));
     if (savedShowTodo !== null) {
@@ -13,28 +13,27 @@ export default function Home() {
     }
   }, []);
 
-  // showTodoの状態が変更されたらローカルストレージに保存
   useEffect(() => {
     localStorage.setItem('showTodo', JSON.stringify(showTodo));
   }, [showTodo]);
 
   return (
-    <div>
+    <div className={styles.container}>
       <Head>
         <title>TODOアプリ</title>
         <meta name="description" content="Next.jsで作成したTODOアプリ" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main style={{ textAlign: 'center', marginTop: '50px' }}>
+      <main>
         {showTodo ? (
           <div>
             <Todo />
-            <button onClick={() => setShowTodo(false)}>戻る</button>
+            <button className={styles.button} onClick={() => setShowTodo(false)}>戻る</button>
           </div>
         ) : (
           <div>
-            <h1>TODOアプリへようこそ</h1>
-            <button onClick={() => setShowTodo(true)}>開始</button>
+            <h1 className={styles.header}>TODOアプリへようこそ</h1>
+            <button className={styles.button} onClick={() => setShowTodo(true)}>開始</button>
           </div>
         )}
       </main>
