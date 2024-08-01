@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 
 const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
+  const [deadline, setDeadline] = useState('');
 
   useEffect(() => {
     const savedTodos = JSON.parse(localStorage.getItem('todos'));
@@ -18,8 +18,9 @@ const Todo = () => {
 
   const addTodo = () => {
     if (input.trim()) {
-      setTodos([...todos, input]);
+      setTodos([...todos, { text: input, deadline }]);
       setInput('');
+      setDeadline('');
     }
   };
 
@@ -29,28 +30,32 @@ const Todo = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
+    <div style={{ textAlign: 'center', marginTop: '20px' }}>
       <h1>TODOリスト</h1>
       <input 
         type="text" 
         value={input} 
         onChange={(e) => setInput(e.target.value)} 
         placeholder="新しいTODOを入力"
-        style={{ padding: '10px', fontSize: '16px' }}
       />
-      <button onClick={addTodo} style={{ padding: '10px 20px', fontSize: '16px' }}>追加</button>
+      <input
+        type="date"
+        value={deadline}
+        onChange={(e) => setDeadline(e.target.value)}
+        placeholder="期限を設定"
+      />
+      <button onClick={addTodo}>追加</button>
       <ul style={{ listStyleType: 'none', padding: 0 }}>
         {todos.map((todo, index) => (
           <li key={index} style={{ marginBottom: '10px' }}>
-            {todo} 
+            {todo.text} 
+            {todo.deadline && (
+              <span>（期限: {todo.deadline}）</span>
+            )}
             <button onClick={() => removeTodo(index)} style={{ marginLeft: '10px' }}>削除</button>
           </li>
         ))}
       </ul>
-      <br />
-      <Link href="/">
-        ホームに戻る
-      </Link>
     </div>
   );
 };

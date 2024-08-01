@@ -1,41 +1,57 @@
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
-import Todo from '../components/Todo';
-import Gacha from '../components/Gacha';
-import styles from '../styles/Home.module.css';
 import Link from 'next/link';
 
 export default function Home() {
   const [showTodo, setShowTodo] = useState(false);
   const [showGacha, setShowGacha] = useState(false);
 
-  // 状態を初期化する
+  // ローカルストレージからshowTodoの状態を読み込む
   useEffect(() => {
-    setShowTodo(false);
-    setShowGacha(false);
+    const savedShowTodo = JSON.parse(localStorage.getItem('showTodo'));
+    if (savedShowTodo !== null) {
+      setShowTodo(savedShowTodo);
+    }
   }, []);
 
+  // showTodoの状態が変更されたらローカルストレージに保存
+  useEffect(() => {
+    localStorage.setItem('showTodo', JSON.stringify(showTodo));
+  }, [showTodo]);
+
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
-        <title>アプリ選択</title>
-        <meta name="description" content="アプリ選択画面" />
+        <title>アプリホーム</title>
+        <meta name="description" content="アプリのホーム画面" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main style={{ textAlign: 'center', marginTop: '50px' }}>
         {showTodo ? (
-          <Todo />
+          <div>
+            <Link href="/todo">
+              <button>TODOリスト</button>
+            </Link>
+            <Link href="/gacha">
+              <button>ガチャシミュレーター</button>
+            </Link>
+            <button onClick={() => setShowTodo(false)}>ホームに戻る</button>
+          </div>
         ) : showGacha ? (
-          <Gacha />
+          <div>
+            <Link href="/gacha">
+              <button>ガチャシミュレーター</button>
+            </Link>
+            <button onClick={() => setShowGacha(false)}>ホームに戻る</button>
+          </div>
         ) : (
           <div>
-            <h1 className={styles.header}>アプリ選択画面</h1>
+            <h1>アプリへようこそ</h1>
             <Link href="/todo">
-              <button>TODOアプリを開始</button>
+              <button>TODOアプリへ開始</button>
             </Link>
-            <br />
             <Link href="/gacha">
-              <button>ガチャシミュレーターを開始</button>
+              <button>ガチャシミュレーターへ開始</button>
             </Link>
           </div>
         )}
