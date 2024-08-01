@@ -13,11 +13,11 @@ export default function Home() {
         <meta name="description" content="Next.jsで作成したTODOアプリ" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main style={{ textAlign: 'center', marginTop: '50px' }}>
         {showTodo ? (
           <Todo />
         ) : (
-          <div style={{ textAlign: 'center', marginTop: '50px' }}>
+          <div>
             <h1>TODOアプリへようこそ</h1>
             <button onClick={() => setShowTodo(true)}>開始</button>
           </div>
