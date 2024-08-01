@@ -1,10 +1,22 @@
-// pages/index.js
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Todo from '../components/Todo';
 
 export default function Home() {
   const [showTodo, setShowTodo] = useState(false);
+
+  // ローカルストレージからshowTodoの状態を読み込む
+  useEffect(() => {
+    const savedShowTodo = JSON.parse(localStorage.getItem('showTodo'));
+    if (savedShowTodo !== null) {
+      setShowTodo(savedShowTodo);
+    }
+  }, []);
+
+  // showTodoの状態が変更されたらローカルストレージに保存
+  useEffect(() => {
+    localStorage.setItem('showTodo', JSON.stringify(showTodo));
+  }, [showTodo]);
 
   return (
     <div>
