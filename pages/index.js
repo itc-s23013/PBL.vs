@@ -27,7 +27,10 @@ export default function Home() {
       </Head>
       <main style={{ textAlign: 'center', marginTop: '50px' }}>
         {showTodo ? (
-          <Todo />
+          <div>
+            <Todo />
+            <button onClick={() => setShowTodo(false)}>戻る</button>
+          </div>
         ) : (
           <div>
             <h1>TODOアプリへようこそ</h1>
