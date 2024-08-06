@@ -101,7 +101,6 @@ body {
     color: #888;
   }
   
-  
   .todo-container {
     width: 500px;
     margin: 0 auto;
@@ -140,4 +139,3 @@ body {
     background-color: #ccc;
     cursor: not-allowed;
   }
-  
