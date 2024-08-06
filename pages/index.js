@@ -48,10 +48,10 @@ export default function Home() {
           <div>
             <h1>アプリへようこそ</h1>
             <Link href="/todo">
-              <button>TODOアプリへ開始</button>
+              <button>TODOアプリを開始</button>
             </Link>
             <Link href="/gacha">
-              <button>ガチャシミュレーターへ開始</button>
+              <button>ガチャシミュレーターを開始</button>
             </Link>
           </div>
         )}
