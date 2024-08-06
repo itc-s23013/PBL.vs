@@ -1,72 +1,92 @@
 import { useState } from 'react';
-import Link from 'next/link';
 import styles from '../styles/Gacha.module.css';
 
-const items = [
-  { id: 1, name: 'アイテムA', rarity: '★', probability: 0.5 },
-  { id: 2, name: 'アイテムB', rarity: '★★', probability: 0.3 },
-  { id: 3, name: 'アイテムC', rarity: '★★★', probability: 0.15 },
-  { id: 4, name: 'アイテムD', rarity: '★★★★', probability: 0.04 },
-  { id: 5, name: 'アイテムE', rarity: '★★★★★', probability: 0.01 },
-];
-
-const getRandomItem = () => {
-  const random = Math.random();
-  let accumulatedProbability = 0;
-  for (const item of items) {
-    accumulatedProbability += item.probability;
-    if (random < accumulatedProbability) {
-      return item;
-    }
-  }
-  return items[items.length - 1];
-};
-
 const Gacha = () => {
-  const [results, setResults] = useState([]);
-  const [history, setHistory] = useState([]);
+  const items = [
+    { name: 'SSRアイテム1', rarity: 'SSR', id: 1 },
+    { name: 'SSRアイテム2', rarity: 'SSR', id: 2 },
+    { name: 'SRアイテム1', rarity: 'SR', id: 3 },
+    { name: 'SRアイテム2', rarity: 'SR', id: 4 },
+    { name: 'Rアイテム1', rarity: 'R', id: 5 },
+    { name: 'Rアイテム2', rarity: 'R', id: 6 },
+  ];
 
-  const rollGacha = (count) => {
-    const newResults = [];
-    for (let i = 0; i < count; i++) {
-      const selectedItem = getRandomItem();
-      newResults.push(selectedItem);
-      setHistory((prevHistory) => [selectedItem, ...prevHistory]);
+  const rarityChances = {
+    SSR: 0.05,
+    SR: 0.15,
+    R: 0.8,
+  };
+
+  const [history, setHistory] = useState([]);
+  const [collection, setCollection] = useState(() => {
+    const savedCollection = JSON.parse(localStorage.getItem('collection'));
+    return savedCollection || [];
+  });
+
+  const getRandomItem = () => {
+    const rand = Math.random();
+    let rarity = 'R';
+    if (rand < rarityChances.SSR) rarity = 'SSR';
+    else if (rand < rarityChances.SSR + rarityChances.SR) rarity = 'SR';
+
+    const filteredItems = items.filter(item => item.rarity === rarity);
+    const randomIndex = Math.floor(Math.random() * filteredItems.length);
+    return filteredItems[randomIndex];
+  };
+
+  const pullGacha = () => {
+    const item = getRandomItem();
+    setHistory((prevHistory) => [item, ...prevHistory]);
+    setCollection((prevCollection) => {
+      if (!prevCollection.find((i) => i.id === item.id)) {
+        const newCollection = [...prevCollection, item];
+        localStorage.setItem('collection', JSON.stringify(newCollection));
+        return newCollection;
+      }
+      return prevCollection;
+    });
+  };
+
+  const pull10Gacha = () => {
+    const newItems = [];
+    for (let i = 0; i < 10; i++) {
+      const item = getRandomItem();
+      newItems.push(item);
+      setCollection((prevCollection) => {
+        if (!prevCollection.find((i) => i.id === item.id)) {
+          const newCollection = [...prevCollection, item];
+          localStorage.setItem('collection', JSON.stringify(newCollection));
+          return newCollection;
+        }
+        return prevCollection;
+      });
     }
-    setResults(newResults);
+    setHistory((prevHistory) => [...newItems, ...prevHistory]);
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
-      <h1>ガチャシミュレーター</h1>
-      <button onClick={() => rollGacha(1)} style={{ padding: '10px 20px', fontSize: '16px' }}>ガチャを1回引く</button>
-      <button onClick={() => rollGacha(10)} style={{ padding: '10px 20px', fontSize: '16px', marginLeft: '10px' }}>ガチャを10回引く</button>
-      <div style={{ marginTop: '20px' }}>
-        <h2>結果</h2>
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
-          {results.map((item, index) => (
-            <li key={index} style={{ marginBottom: '10px' }}>
-              <Link href={`/item/${item.id}`}>
-                {item.name} {item.rarity}
-              </Link>
-            </li>
-          ))}
-        </ul>
+    <div className={styles.container}>
+      <h1 className={styles.title}>ガチャシミュレーター</h1>
+      <div className={styles.buttonContainer}>
+        <button onClick={pullGacha} className={styles.button}>ガチャを引く</button>
+        <button onClick={pull10Gacha} className={styles.button}>10連ガチャを引く</button>
       </div>
-      <div style={{ marginTop: '20px' }}>
-        <h3>履歴</h3>
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
-          {history.map((item, index) => (
-            <li key={index} style={{ marginBottom: '10px' }}>
-              {item.name} {item.rarity}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <br />
-      <Link href="/">
-        ホームに戻る
-      </Link>
+      <h2 className={styles.subtitle}>ガチャ履歴</h2>
+      <ul className={styles.history}>
+        {history.map((item, index) => (
+          <li key={index} className={`${styles.item} ${styles[item.rarity.toLowerCase()]}`}>
+            {item.name} ({item.rarity})
+          </li>
+        ))}
+      </ul>
+      <h2 className={styles.subtitle}>コレクション</h2>
+      <ul className={styles.collection}>
+        {collection.map((item, index) => (
+          <li key={index} className={`${styles.item} ${styles[item.rarity.toLowerCase()]}`}>
+            {item.name} ({item.rarity})
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
