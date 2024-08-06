@@ -1,9 +1,9 @@
-// components/Todo.js
 import { useState, useEffect } from 'react';
 
 const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
+  const [deadline, setDeadline] = useState(''); // 期限用のステートを追加
 
   // ローカルストレージからTODOリストを読み込む
   useEffect(() => {
@@ -20,8 +20,9 @@ const Todo = () => {
 
   const addTodo = () => {
     if (input.trim()) {
-      setTodos([...todos, input]);
+      setTodos([...todos, { text: input, deadline }]);
       setInput('');
+      setDeadline('');
     }
   };
 
@@ -39,12 +40,21 @@ const Todo = () => {
         onChange={(e) => setInput(e.target.value)} 
         placeholder="新しいTODOを入力"
       />
+      <input
+        type="date"
+        value={deadline}
+        onChange={(e) => setDeadline(e.target.value)}
+        placeholder="期限を設定"
+      />
       <button onClick={addTodo}>追加</button>
       <ul style={{ listStyleType: 'none', padding: 0 }}>
         {todos.map((todo, index) => (
-          <li key={index}>
-            {todo} 
-            <button onClick={() => removeTodo(index)}>削除</button>
+          <li key={index} style={{ marginBottom: '10px' }}>
+            {todo.text} 
+            {todo.deadline && (
+              <span>（期限: {todo.deadline}）</span>
+            )}
+            <button onClick={() => removeTodo(index)} style={{ marginLeft: '10px' }}>削除</button>
           </li>
         ))}
       </ul>
@@ -53,4 +63,3 @@ const Todo = () => {
 };
 
 export default Todo;
-
