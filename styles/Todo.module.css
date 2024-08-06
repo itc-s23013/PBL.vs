@@ -4,35 +4,69 @@
   margin-top: 20px;
 }
 
-.inputContainer {
+.header {
+  font-size: 24px;
   margin-bottom: 20px;
 }
 
-input[type="text"], input[type="date"] {
+.inputField {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.inputField input[type="text"],
+.inputField input[type="date"] {
   padding: 10px;
   font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin: 5px;
+  margin: 5px 0;
+  width: 200px;
+  box-sizing: border-box;
 }
 
-button {
+.addButton {
   padding: 10px 20px;
-  border-radius: 5px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
-ul {
+.addButton:hover {
+  background-color: #45a049;
+}
+
+.todoList {
   list-style-type: none;
   padding: 0;
 }
 
-li {
+.todoItem {
   margin-bottom: 10px;
 }
 
-.deadline {
-  color: #666;
-  font-size: 14px;
+.todoText {
+  font-weight: bold;
+}
+
+.todoDeadline {
   margin-left: 10px;
+  font-style: italic;
+  color: #555;
+}
+
+.removeButton {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  background-color: #e53935;
 }
 

@@ -1,10 +1,13 @@
+// components/Todo.js
 import { useState, useEffect } from 'react';
+import styles from '../styles/Todo.module.css'; // CSSモジュールをインポート
 
 const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
-  const [deadline, setDeadline] = useState('');
+  const [deadline, setDeadline] = useState(''); // 期限用のステートを追加
 
+  // ローカルストレージからTODOリストを読み込む
   useEffect(() => {
     const savedTodos = JSON.parse(localStorage.getItem('todos'));
     if (savedTodos) {
@@ -12,6 +15,7 @@ const Todo = () => {
     }
   }, []);
 
+  // TODOリストが変更されたらローカルストレージに保存
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
@@ -30,29 +34,31 @@ const Todo = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '20px' }}>
-      <h1>TODOリスト</h1>
-      <input 
-        type="text" 
-        value={input} 
-        onChange={(e) => setInput(e.target.value)} 
-        placeholder="新しいTODOを入力"
-      />
-      <input
-        type="date"
-        value={deadline}
-        onChange={(e) => setDeadline(e.target.value)}
-        placeholder="期限を設定"
-      />
-      <button onClick={addTodo}>追加</button>
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
+    <div className={styles.todoContainer}>
+      <h1 className={styles.header}>TODOリスト</h1>
+      <div className={styles.inputField}>
+        <input 
+          type="text" 
+          value={input} 
+          onChange={(e) => setInput(e.target.value)} 
+          placeholder="新しいTODOを入力"
+        />
+        <input
+          type="date"
+          value={deadline}
+          onChange={(e) => setDeadline(e.target.value)}
+          placeholder="期限を設定"
+        />
+      </div>
+      <button className={styles.addButton} onClick={addTodo}>追加</button>
+      <ul className={styles.todoList}>
         {todos.map((todo, index) => (
-          <li key={index} style={{ marginBottom: '10px' }}>
-            {todo.text} 
+          <li key={index} className={styles.todoItem}>
+            <span className={styles.todoText}>{todo.text}</span> 
             {todo.deadline && (
-              <span>（期限: {todo.deadline}）</span>
+              <span className={styles.todoDeadline}>（期限: {todo.deadline}）</span>
             )}
-            <button onClick={() => removeTodo(index)} style={{ marginLeft: '10px' }}>削除</button>
+            <button className={styles.removeButton} onClick={() => removeTodo(index)}>削除</button>
           </li>
         ))}
       </ul>

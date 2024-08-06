@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import styles from '../styles/Gacha.module.css';
 
 const items = [
   { id: 1, name: 'アイテムA', rarity: '★', probability: 0.5 },
