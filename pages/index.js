@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
+import Todo from '../components/Todo';
 import Link from 'next/link';
+import styles from '../styles/Home.module.css';
 
 export default function Home() {
   const [showTodo, setShowTodo] = useState(false);

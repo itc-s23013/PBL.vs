@@ -1,0 +1,24 @@
+/* styles/Gacha.module.css */
+.gachaContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.gachaButton {
+  margin: 20px;
+}
+
+.result {
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.itemList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.item {
+  margin-bottom: 10px;
+}
+
