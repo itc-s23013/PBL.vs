@@ -1,16 +1,15 @@
-// components/Todo.js
 import { useState, useEffect } from 'react';
 
 const Todo = () => {
   const [todos, setTodos] = useState([]);
   const [input, setInput] = useState('');
   const [dueDate, setDueDate] = useState(new Date().toLocaleDateString());
-  const [noteInput, setNoteInput] = useState(''); // メモ入力の状態
+  const [noteInput, setNoteInput] = useState('');
+  const [priority, setPriority] = useState('低');
   const [editIndex, setEditIndex] = useState(null);
   const [isEditingTodo, setIsEditingTodo] = useState(false);
-  const [deletedTodos, setDeletedTodos] = useState([]); // 削除されたタスクを保存する状態
+  const [deletedTodos, setDeletedTodos] = useState([]);
 
-  // ローカルストレージからTODOリストを読み込む
   useEffect(() => {
     const savedTodos = JSON.parse(localStorage.getItem('todos'));
     if (savedTodos) {
@@ -22,12 +21,10 @@ const Todo = () => {
     }
   }, []);
 
-  // TODOリストが変更されたらローカルストレージに保存
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  // 削除されたTODOリストが変更されたらローカルストレージに保存
   useEffect(() => {
     localStorage.setItem('deletedTodos', JSON.stringify(deletedTodos));
   }, [deletedTodos]);
@@ -39,7 +36,8 @@ const Todo = () => {
         completed: false,
         timestamp: new Date().toLocaleString(),
         dueDate,
-        note: noteInput // メモを追加
+        note: noteInput,
+        priority
       };
 
       if (isEditingTodo) {
@@ -54,7 +52,8 @@ const Todo = () => {
       }
       setInput('');
       setDueDate(new Date().toLocaleDateString());
-      setNoteInput(''); // メモ入力をリセット
+      setNoteInput('');
+      setPriority('低');
     }
   };
 
@@ -62,14 +61,14 @@ const Todo = () => {
     const removedTodo = todos[index];
     const newTodos = todos.filter((_, i) => i !== index);
     setTodos(newTodos);
-    setDeletedTodos([...deletedTodos, removedTodo]); // 削除されたタスクを保存
+    setDeletedTodos([...deletedTodos, removedTodo]);
   };
 
   const restoreTodo = (index) => {
     const restoredTodo = deletedTodos[index];
     const newDeletedTodos = deletedTodos.filter((_, i) => i !== index);
     setDeletedTodos(newDeletedTodos);
-    setTodos([...todos, restoredTodo]); // 削除されたタスクを復元
+    setTodos([...todos, restoredTodo]);
   };
 
   const toggleTodo = (index) => {
@@ -82,26 +81,27 @@ const Todo = () => {
   const editTodo = (index) => {
     setInput(todos[index].text);
     setDueDate(todos[index].dueDate);
-    setNoteInput(todos[index].note); // メモを編集用に設定
+    setNoteInput(todos[index].note);
+    setPriority(todos[index].priority);
     setEditIndex(index);
     setIsEditingTodo(true);
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '1.5em' }}>
-      <h1 style={{ fontSize: '2em' }}>TODOリスト</h1>
+    <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '1.2em' }}>
+      <h1 style={{ fontSize: '1.5em' }}>TODOリスト</h1>
       <input 
         type="text" 
         value={input} 
         onChange={(e) => setInput(e.target.value)} 
         placeholder="新しいTODOを入力"
-        style={{ fontSize: '1.5em', padding: '10px', width: '80%', marginBottom: '10px' }}
+        style={{ fontSize: '1.2em', padding: '8px', width: '80%', marginBottom: '10px' }}
       />
       <input 
         type="date" 
         value={dueDate} 
         onChange={(e) => setDueDate(e.target.value)}
-        style={{ fontSize: '1.5em', padding: '10px', marginBottom: '10px' }}
+        style={{ fontSize: '1.2em', padding: '8px', marginBottom: '10px' }}
       />
       <textarea
         value={noteInput}
@@ -109,20 +109,32 @@ const Todo = () => {
         placeholder="メモを追加"
         rows="4"
         cols="50"
-        style={{ fontSize: '1.5em', padding: '10px', width: '80%', marginBottom: '10px' }}
+        style={{ fontSize: '1.2em', padding: '8px', width: '80%', marginBottom: '10px' }}
       />
+      <select
+        value={priority}
+        onChange={(e) => setPriority(e.target.value)}
+        style={{ fontSize: '1.2em', padding: '8px', width: '80%', marginBottom: '10px' }}
+      >
+        <option value="低">低</option>
+        <option value="中">中</option>
+        <option value="高">高</option>
+      </select>
       <button 
         onClick={addTodo} 
-        style={{ fontSize: '1.5em', padding: '10px 20px', marginBottom: '20px' }}>
+        style={{ fontSize: '1.2em', padding: '8px 16px', marginBottom: '20px' }}>
         {isEditingTodo ? '更新' : '追加'}
       </button>
-      <h2 style={{ fontSize: '2em' }}>タスクリスト</h2>
-      <ul style={{ listStyleType: 'none', padding: 0, fontSize: '1.5em' }}>
+      <h2 style={{ fontSize: '1.5em' }}>タスクリスト</h2>
+      <ul style={{ listStyleType: 'none', padding: 0, fontSize: '1.2em' }}>
         {todos.map((todo, index) => (
-          <li key={index} style={{ textDecoration: todo.completed ? 'line-through' : 'none', marginBottom: '20px' }}>
+          <li key={index} style={{ textDecoration: todo.completed ? 'line-through' : 'none', marginBottom: '15px' }}>
             <span>{todo.text}</span><br/>
             <span style={{ fontSize: '0.8em', color: 'gray' }}>{todo.timestamp}</span><br/>
             <span style={{ fontSize: '0.8em', color: 'green' }}>期限: {todo.dueDate}</span><br/>
+            <span style={{ fontSize: '0.8em', color: todo.priority === '高' ? 'red' : (todo.priority === '中' ? 'orange' : 'blue') }}>
+              重要度: {todo.priority}
+            </span><br/>
             {todo.note && (
               <div style={{ marginTop: '10px', padding: '5px', border: '1px solid #ccc', borderRadius: '4px' }}>
                 <strong>メモ:</strong>
@@ -139,10 +151,10 @@ const Todo = () => {
       </ul>
       {deletedTodos.length > 0 && (
         <div>
-          <h2 style={{ fontSize: '2em' }}>削除されたタスクリスト</h2>
-          <ul style={{ listStyleType: 'none', padding: 0, fontSize: '1.5em' }}>
+          <h2 style={{ fontSize: '1.5em' }}>削除されたタスクリスト</h2>
+          <ul style={{ listStyleType: 'none', padding: 0, fontSize: '1.2em' }}>
             {deletedTodos.map((todo, index) => (
-              <li key={index} style={{ marginBottom: '20px' }}>
+              <li key={index} style={{ marginBottom: '15px' }}>
                 <span>{todo.text}</span><br/>
                 <button onClick={() => restoreTodo(index)} style={{ fontSize: '1em', padding: '5px 10px' }}>復元</button>
               </li>
