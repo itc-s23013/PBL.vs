@@ -1,0 +1,95 @@
+/* Todo.module.css */
+.container {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.2em;
+  }
+  
+  .title {
+    font-size: 1.5em;
+  }
+  
+  .input {
+    font-size: 1.2em;
+    padding: 8px;
+    width: 80%;
+    margin-bottom: 10px;
+  }
+  
+  .button {
+    font-size: 1.2em;
+    padding: 8px 16px;
+    margin-bottom: 20px;
+  }
+  
+  .todoList {
+    list-style-type: none;
+    padding: 0;
+    font-size: 1.2em;
+  }
+  
+  .todoItem {
+    text-decoration: none;
+    margin-bottom: 15px;
+  }
+  
+  .completed {
+    text-decoration: line-through;
+  }
+  
+  .timestamp {
+    font-size: 0.8em;
+    color: gray;
+  }
+  
+  .dueDate {
+    font-size: 0.8em;
+    color: green;
+  }
+  
+  .priority {
+    font-size: 0.8em;
+  }
+  
+  .priorityLow {
+    color: blue;
+  }
+  
+  .priorityMedium {
+    color: orange;
+  }
+  
+  .priorityHigh {
+    color: red;
+  }
+  
+  .note {
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .noteTitle {
+    font-weight: bold;
+  }
+  
+  .buttonSmall {
+    font-size: 1em;
+    padding: 5px 10px;
+  }
+  
+  .deletedTodosTitle {
+    font-size: 1.5em;
+  }
+  
+  .deletedTodoList {
+    list-style-type: none;
+    padding: 0;
+    font-size: 1.2em;
+  }
+  
+  .deletedTodoItem {
+    margin-bottom: 15px;
+  }
+  

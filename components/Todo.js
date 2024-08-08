@@ -1,4 +1,7 @@
+// components/Todo.js
 import { useState, useEffect } from 'react';
+import TodoList from './TodoList';
+import styles from './Todo.module.css';
 
 const Todo = () => {
   const [todos, setTodos] = useState([]);
@@ -87,82 +90,31 @@ const Todo = () => {
     setIsEditingTodo(true);
   };
 
+  const permanentlyRemoveTodo = (index) => {
+    const newDeletedTodos = deletedTodos.filter((_, i) => i !== index);
+    setDeletedTodos(newDeletedTodos);
+  };
+
   return (
-    <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '1.2em' }}>
-      <h1 style={{ fontSize: '1.5em' }}>TODOリスト</h1>
-      <input 
-        type="text" 
-        value={input} 
-        onChange={(e) => setInput(e.target.value)} 
-        placeholder="新しいTODOを入力"
-        style={{ fontSize: '1.2em', padding: '8px', width: '80%', marginBottom: '10px' }}
-      />
-      <input 
-        type="date" 
-        value={dueDate} 
-        onChange={(e) => setDueDate(e.target.value)}
-        style={{ fontSize: '1.2em', padding: '8px', marginBottom: '10px' }}
-      />
-      <textarea
-        value={noteInput}
-        onChange={(e) => setNoteInput(e.target.value)}
-        placeholder="メモを追加"
-        rows="4"
-        cols="50"
-        style={{ fontSize: '1.2em', padding: '8px', width: '80%', marginBottom: '10px' }}
-      />
-      <select
-        value={priority}
-        onChange={(e) => setPriority(e.target.value)}
-        style={{ fontSize: '1.2em', padding: '8px', width: '80%', marginBottom: '10px' }}
-      >
-        <option value="低">低</option>
-        <option value="中">中</option>
-        <option value="高">高</option>
-      </select>
-      <button 
-        onClick={addTodo} 
-        style={{ fontSize: '1.2em', padding: '8px 16px', marginBottom: '20px' }}>
-        {isEditingTodo ? '更新' : '追加'}
-      </button>
-      <h2 style={{ fontSize: '1.5em' }}>タスクリスト</h2>
-      <ul style={{ listStyleType: 'none', padding: 0, fontSize: '1.2em' }}>
-        {todos.map((todo, index) => (
-          <li key={index} style={{ textDecoration: todo.completed ? 'line-through' : 'none', marginBottom: '15px' }}>
-            <span>{todo.text}</span><br/>
-            <span style={{ fontSize: '0.8em', color: 'gray' }}>{todo.timestamp}</span><br/>
-            <span style={{ fontSize: '0.8em', color: 'green' }}>期限: {todo.dueDate}</span><br/>
-            <span style={{ fontSize: '0.8em', color: todo.priority === '高' ? 'red' : (todo.priority === '中' ? 'orange' : 'blue') }}>
-              重要度: {todo.priority}
-            </span><br/>
-            {todo.note && (
-              <div style={{ marginTop: '10px', padding: '5px', border: '1px solid #ccc', borderRadius: '4px' }}>
-                <strong>メモ:</strong>
-                <p>{todo.note}</p>
-              </div>
-            )}
-            <button onClick={() => toggleTodo(index)} style={{ fontSize: '1em', padding: '5px 10px' }}>
-              {todo.completed ? '未完了' : '完了'}
-            </button>
-            <button onClick={() => editTodo(index)} style={{ fontSize: '1em', padding: '5px 10px' }}>編集</button>
-            <button onClick={() => removeTodo(index)} style={{ fontSize: '1em', padding: '5px 10px' }}>削除</button>
-          </li>
-        ))}
-      </ul>
-      {deletedTodos.length > 0 && (
-        <div>
-          <h2 style={{ fontSize: '1.5em' }}>削除されたタスクリスト</h2>
-          <ul style={{ listStyleType: 'none', padding: 0, fontSize: '1.2em' }}>
-            {deletedTodos.map((todo, index) => (
-              <li key={index} style={{ marginBottom: '15px' }}>
-                <span>{todo.text}</span><br/>
-                <button onClick={() => restoreTodo(index)} style={{ fontSize: '1em', padding: '5px 10px' }}>復元</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+    <TodoList
+      todos={todos}
+      deletedTodos={deletedTodos}
+      input={input}
+      dueDate={dueDate}
+      noteInput={noteInput}
+      priority={priority}
+      isEditingTodo={isEditingTodo}
+      handleInputChange={(e) => setInput(e.target.value)}
+      handleDueDateChange={(e) => setDueDate(e.target.value)}
+      handleNoteInputChange={(e) => setNoteInput(e.target.value)}
+      handlePriorityChange={(e) => setPriority(e.target.value)}
+      handleAddTodo={addTodo}
+      handleToggleTodo={toggleTodo}
+      handleEditTodo={editTodo}
+      handleRemoveTodo={removeTodo}
+      handleRestoreTodo={restoreTodo}
+      handlePermanentlyRemoveTodo={permanentlyRemoveTodo}
+    />
   );
 };
 
