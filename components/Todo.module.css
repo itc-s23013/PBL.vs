@@ -1,95 +1,79 @@
-/* Todo.module.css */
+/* 他のスタイルがここにあります */
+
 .container {
-    text-align: center;
-    margin-top: 20px;
-    font-size: 1.2em;
-  }
-  
-  .title {
-    font-size: 1.5em;
-  }
-  
-  .input {
-    font-size: 1.2em;
-    padding: 8px;
-    width: 80%;
-    margin-bottom: 10px;
-  }
-  
-  .button {
-    font-size: 1.2em;
-    padding: 8px 16px;
-    margin-bottom: 20px;
-  }
-  
-  .todoList {
-    list-style-type: none;
-    padding: 0;
-    font-size: 1.2em;
-  }
-  
-  .todoItem {
-    text-decoration: none;
-    margin-bottom: 15px;
-  }
-  
-  .completed {
-    text-decoration: line-through;
-  }
-  
-  .timestamp {
-    font-size: 0.8em;
-    color: gray;
-  }
-  
-  .dueDate {
-    font-size: 0.8em;
-    color: green;
-  }
-  
-  .priority {
-    font-size: 0.8em;
-  }
-  
-  .priorityLow {
-    color: blue;
-  }
-  
-  .priorityMedium {
-    color: orange;
-  }
-  
-  .priorityHigh {
-    color: red;
-  }
-  
-  .note {
-    margin-top: 10px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .noteTitle {
-    font-weight: bold;
-  }
-  
-  .buttonSmall {
-    font-size: 1em;
-    padding: 5px 10px;
-  }
-  
-  .deletedTodosTitle {
-    font-size: 1.5em;
-  }
-  
-  .deletedTodoList {
-    list-style-type: none;
-    padding: 0;
-    font-size: 1.2em;
-  }
-  
-  .deletedTodoItem {
-    margin-bottom: 15px;
-  }
-  
+  padding: 20px;
+  font-size: 1.2em; /* 全体のフォントサイズを大きく */
+}
+
+.title {
+  font-size: 2em; /* タイトルのフォントサイズを大きく */
+}
+
+.input, .button, .buttonSmall, .select {
+  padding: 20px; /* パディングを大きく */
+  font-size: 1.2em; /* フォントサイズを大きく */
+}
+
+.textarea {
+  padding: 15px;
+  font-size: 1.2em;
+  height: 40px !important; /* 他の入力欄と同じ高さに設定、強制適用 */
+  box-sizing: border-box; /* パディングが高さに影響しないようにする */
+}
+
+.todoList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.todoItem {
+  padding: 15px;
+  border-bottom: 2px solid #ddd;
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+.timestamp, .dueDate, .priority {
+  font-size: 1.1em; /* フォントサイズを少し大きく */
+}
+
+/* 他のスタイルがここにあります */
+
+.note {
+  margin-top: 30px; /* 上のマージンを増やして下に移動 */
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+}
+
+.noteTitle {
+  font-weight: bold;
+  font-size: 1.3em; /* タイトルのフォントサイズを大きく */
+}
+
+.deletedTodosTitle,
+.deletedNotesTitle {
+  margin-top: 30px;
+  font-size: 1.5em; /* 削除されたタスク/メモのタイトルのフォントサイズを大きく */
+}
+
+.deletedTodoList,
+.deletedNoteList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.deletedTodoItem,
+.deletedNoteItem {
+  padding: 20px;
+  border-bottom: 2px solid #ddd;
+}
+
+.deletedTodoItem button,
+.deletedNoteItem button {
+  margin: 10px; /* マージンを大きく */
+}
+
+/* 他のスタイルがここにあります */

@@ -1,7 +1,5 @@
-// components/Todo.js
 import { useState, useEffect } from 'react';
-import TodoList from './TodoList';
-import styles from './Todo.module.css';
+import styles from './Todo.module.css'; // CSSモジュールをインポート
 
 const Todo = () => {
   const [todos, setTodos] = useState([]);
@@ -12,6 +10,7 @@ const Todo = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [isEditingTodo, setIsEditingTodo] = useState(false);
   const [deletedTodos, setDeletedTodos] = useState([]);
+  const [deletedNotes, setDeletedNotes] = useState([]);
 
   useEffect(() => {
     const savedTodos = JSON.parse(localStorage.getItem('todos'));
@@ -22,6 +21,10 @@ const Todo = () => {
     if (savedDeletedTodos) {
       setDeletedTodos(savedDeletedTodos);
     }
+    const savedDeletedNotes = JSON.parse(localStorage.getItem('deletedNotes'));
+    if (savedDeletedNotes) {
+      setDeletedNotes(savedDeletedNotes);
+    }
   }, []);
 
   useEffect(() => {
@@ -31,6 +34,10 @@ const Todo = () => {
   useEffect(() => {
     localStorage.setItem('deletedTodos', JSON.stringify(deletedTodos));
   }, [deletedTodos]);
+
+  useEffect(() => {
+    localStorage.setItem('deletedNotes', JSON.stringify(deletedNotes));
+  }, [deletedNotes]);
 
   const addTodo = () => {
     if (input.trim()) {
@@ -74,6 +81,16 @@ const Todo = () => {
     setTodos([...todos, restoredTodo]);
   };
 
+  const deleteTodoPermanently = (index) => {
+    const newDeletedTodos = deletedTodos.filter((_, i) => i !== index);
+    setDeletedTodos(newDeletedTodos);
+  };
+
+  const deleteNotePermanently = (index) => {
+    const newDeletedNotes = deletedNotes.filter((_, i) => i !== index);
+    setDeletedNotes(newDeletedNotes);
+  };
+
   const toggleTodo = (index) => {
     const updatedTodos = todos.map((todo, i) =>
       i === index ? { ...todo, completed: !todo.completed } : todo
@@ -90,31 +107,130 @@ const Todo = () => {
     setIsEditingTodo(true);
   };
 
-  const permanentlyRemoveTodo = (index) => {
-    const newDeletedTodos = deletedTodos.filter((_, i) => i !== index);
-    setDeletedTodos(newDeletedTodos);
-  };
-
   return (
-    <TodoList
-      todos={todos}
-      deletedTodos={deletedTodos}
-      input={input}
-      dueDate={dueDate}
-      noteInput={noteInput}
-      priority={priority}
-      isEditingTodo={isEditingTodo}
-      handleInputChange={(e) => setInput(e.target.value)}
-      handleDueDateChange={(e) => setDueDate(e.target.value)}
-      handleNoteInputChange={(e) => setNoteInput(e.target.value)}
-      handlePriorityChange={(e) => setPriority(e.target.value)}
-      handleAddTodo={addTodo}
-      handleToggleTodo={toggleTodo}
-      handleEditTodo={editTodo}
-      handleRemoveTodo={removeTodo}
-      handleRestoreTodo={restoreTodo}
-      handlePermanentlyRemoveTodo={permanentlyRemoveTodo}
-    />
+    <div className={styles.container}>
+      <h1 className={styles.title}>TODOリスト</h1>
+      <input 
+        type="text" 
+        value={input} 
+        onChange={(e) => setInput(e.target.value)} 
+        placeholder="新しいTODOを入力"
+        className={styles.input}
+      />
+      <input 
+        type="date" 
+        value={dueDate} 
+        onChange={(e) => setDueDate(e.target.value)}
+        className={styles.input}
+      />
+      <textarea
+        value={noteInput}
+        onChange={(e) => setNoteInput(e.target.value)}
+        placeholder="メモを追加"
+        rows="4"
+        cols="50"
+        className={styles.input}
+      />
+      <select
+        value={priority}
+        onChange={(e) => setPriority(e.target.value)}
+        className={styles.input}
+      >
+        <option value="低">低</option>
+        <option value="中">中</option>
+        <option value="高">高</option>
+      </select>
+      <button 
+        onClick={addTodo} 
+        className={styles.button}
+      >
+        {isEditingTodo ? '更新' : '追加'}
+      </button>
+      <h2 className={styles.title}>タスクリスト</h2>
+      <ul className={styles.todoList}>
+        {todos.map((todo, index) => (
+          <li 
+            key={index} 
+            className={`${styles.todoItem} ${todo.completed ? styles.completed : ''}`}
+          >
+            <span>{todo.text}</span><br/>
+            <span className={styles.timestamp}>{todo.timestamp}</span><br/>
+            <span className={styles.dueDate}>期限: {todo.dueDate}</span><br/>
+            <span 
+              className={`${styles.priority} ${todo.priority === '高' ? styles.priorityHigh : (todo.priority === '中' ? styles.priorityMedium : styles.priorityLow)}`}
+            >
+              重要度: {todo.priority}
+            </span><br/>
+            {todo.note && (
+              <div className={styles.note}>
+                <strong className={styles.noteTitle}>メモ:</strong>
+                <p>{todo.note}</p>
+              </div>
+            )}
+            <button 
+              onClick={() => toggleTodo(index)} 
+              className={styles.buttonSmall}
+            >
+              {todo.completed ? '未完了' : '完了'}
+            </button>
+            <button 
+              onClick={() => editTodo(index)} 
+              className={styles.buttonSmall}
+            >
+              編集
+            </button>
+            <button 
+              onClick={() => removeTodo(index)} 
+              className={styles.buttonSmall}
+            >
+              削除
+            </button>
+          </li>
+        ))}
+      </ul>
+      {deletedTodos.length > 0 && (
+        <div>
+          <h2 className={styles.deletedTodosTitle}>削除されたタスクリスト</h2>
+          <ul className={styles.deletedTodoList}>
+            {deletedTodos.map((todo, index) => (
+              <li key={index} className={styles.deletedTodoItem}>
+                <span>{todo.text}</span><br/>
+                <button 
+                  onClick={() => restoreTodo(index)} 
+                  className={styles.buttonSmall}
+                >
+                  復元
+                </button>
+                <button 
+                  onClick={() => deleteTodoPermanently(index)} 
+                  className={styles.buttonSmall}
+                >
+                  完全削除
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {deletedNotes.length > 0 && (
+        <div>
+          <h2 className={styles.deletedNotesTitle}>削除されたメモ</h2>
+          <ul className={styles.deletedNoteList}>
+            {deletedNotes.map((note, index) => (
+              <li key={index} className={styles.deletedNoteItem}>
+                <p>{note}</p><br/>
+                <button 
+                  onClick={() => deleteNotePermanently(index)} 
+                  className={styles.buttonSmall}
+                >
+                  完全削除
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
   );
 };
 
